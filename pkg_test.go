@@ -5,49 +5,85 @@
 package main
 
 import (
-	"fmt"
 	"testing"
+
+	"github.com/gookit/color"
 )
 
-func TestReplaceCaseInsensitive(t *testing.T) {
-
-	var tests = []struct {
-		originalStr  string
-		expectedStr  string
-		originalWord string
-		replacedWord string
+func TestColorize(t *testing.T) {
+	tests := []struct {
+		name     string
+		text     string
+		chunks   []string
+		expected string
 	}{
 		{
-			"This is just a random string",
-			"This is just a random string",
-			"just",
-			"just",
+			name:     "Colorize single chunk",
+			text:     "The quick brown fox",
+			chunks:   []string{"quick"},
+			expected: "The \x1b[41mquick\x1b[0m brown fox",
 		},
 		{
-			"This is just a random string",
-			"This is testing a random string",
-			"just",
-			"testing",
+			name:     "Colorize multiple chunks",
+			text:     "quick quick quick",
+			chunks:   []string{"quick"},
+			expected: "\x1b[41mquick\x1b[0m \x1b[41mquick\x1b[0m \x1b[41mquick\x1b[0m",
 		},
 		{
-			"This is just a random string",
-			"This is just a random string",
-			"JUST",
-			"just",
+			name:     "No colorization",
+			text:     "The lazy dog",
+			chunks:   []string{"quick"},
+			expected: "The lazy dog",
 		},
 	}
 
 	for _, tt := range tests {
-		testname := fmt.Sprintf("replace_%s_with_%s", tt.originalWord, tt.replacedWord)
-		t.Run(testname, func(t *testing.T) {
-
-			ans := replaceCaseInsensitive(tt.originalStr, tt.originalWord, tt.replacedWord)
-
-			if ans != tt.expectedStr {
-				t.Errorf("Expected String(%s) is not same as"+
-					" result string (%s)", tt.expectedStr, ans)
+		t.Run(tt.name, func(t *testing.T) {
+			result := colorize(tt.text, tt.chunks)
+			if result != tt.expected {
+				t.Errorf("Expected: %s, Got: %s", tt.expected, result)
 			}
+		})
+	}
+}
 
+func TestReplaceTxt(t *testing.T) {
+	tests := []struct {
+		name       string
+		text       string
+		chunk      string
+		colorChunk color.Color
+		expected   string
+	}{
+		{
+			name:       "Replace single occurrence",
+			text:       "The quick brown fox",
+			chunk:      "quick",
+			colorChunk: color.FgGreen,
+			expected:   "The \x1b[32mquick\x1b[0m brown fox",
+		},
+		{
+			name:       "Replace multiple occurrences",
+			text:       "quick quick quick",
+			chunk:      "quick",
+			colorChunk: color.FgRed,
+			expected:   "\x1b[31mquick\x1b[0m \x1b[31mquick\x1b[0m \x1b[31mquick\x1b[0m",
+		},
+		{
+			name:       "No replacement",
+			text:       "The lazy dog",
+			chunk:      "quick",
+			colorChunk: color.FgBlue,
+			expected:   "The lazy dog",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := replaceTxt(tt.text, tt.chunk, tt.colorChunk)
+			if result != tt.expected {
+				t.Errorf("Expected: %s, Got: %s", tt.expected, result)
+			}
 		})
 	}
 }

@@ -10,16 +10,22 @@ import (
 	"github.com/gookit/color"
 )
 
-func replaceCaseInsensitive(text string, chunk string, colorChunk string) string {
+func replaceTxt(text string, chunk string, colorChunk color.Color) string {
 	re := regexp.MustCompile(`(?i)` + chunk)
-	return re.ReplaceAllString(text, colorChunk)
+	return re.ReplaceAllString(text, colorChunk.Render(chunk))
 }
 
-func colorizeChunks(text string, chunks []string) string {
+func colorize(text string, chunks []string) string {
+	colors := []color.Color{
+		color.BgRed,
+		color.BgGreen,
+		color.BgCyan,
+		color.BgHiMagenta,
+	}
 
-	for _, chunk := range chunks {
-		chunkWithColor := color.BgGreen.Sprintf("%s", chunk)
-		text = replaceCaseInsensitive(text, chunk, chunkWithColor)
+	for i, chunk := range chunks {
+		chunkWithColor := colors[i%len(colors)]
+		text = replaceTxt(text, chunk, chunkWithColor)
 	}
 	return text
 }

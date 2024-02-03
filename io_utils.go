@@ -25,15 +25,13 @@ func digestIo(r io.Reader, w io.Writer) error {
 	// pipe capacity is 65536 bytes. Since Linux 2.6.35, the default pipe
 	// capacity is 65536 bytes.
 	//
-	// For me it's ok with the default value, but you can change the buffer
-	// size to increase performance.
-	//
+	// You can change the buffer size to increase performance.
 	// scanner := bufio.NewScanner(bufio.NewReaderSize(r, 64*1024))
 
 	scanner := bufio.NewScanner(bufio.NewReader(r))
 
 	for scanner.Scan() {
-		text := colorizeChunks(scanner.Text(), os.Args[1:])
+		text := colorize(scanner.Text(), os.Args[1:])
 		_, err := fmt.Fprintln(w, text)
 		if scanner.Err(); err != nil {
 			log.Fatal(err)
