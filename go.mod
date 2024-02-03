@@ -1,6 +1,6 @@
 module github.com/jalmuedo/pipecolor
 
-go 1.21.5
+go 1.21
 
 require (
 	github.com/gookit/color v1.5.4 // indirect
