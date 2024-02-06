@@ -5,6 +5,7 @@
 package main
 
 import (
+	"os"
 	"testing"
 
 	"github.com/gookit/color"
@@ -86,4 +87,35 @@ func TestReplaceTxt(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestIsInputFromPipe(t *testing.T) {
+
+	t.Run("Input from pipe", func(t *testing.T) {
+		// file (pipe) to simulate pipeline input
+		r, w, _ := os.Pipe()
+		defer w.Close()
+		defer r.Close()
+
+		// replace stdin with pipe
+		oldStdin := os.Stdin
+		defer func() { os.Stdin = oldStdin }()
+		os.Stdin = r
+
+		result := isInputFromPipe()
+		if result != true {
+			t.Errorf("Expect true, but get %t", result)
+		}
+	})
+
+	t.Run("Input from terminal", func(t *testing.T) {
+		oldStdin := os.Stdin
+		defer func() { os.Stdin = oldStdin }()
+		os.Stdin = oldStdin
+
+		result := isInputFromPipe()
+		if result != false {
+			t.Errorf("Expect false, but get %t", result)
+		}
+	})
 }
