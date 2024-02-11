@@ -53,5 +53,10 @@ jobs:
         files: |
           artifacts/linux/pipecolor
           artifacts/windows/pipecolor.exe
+        body: |
+          **Release Notes:**
+    
+          - The `pipecolor` artifact is for **Linux**.
+          - The `pipecolor.exe` artifact is for **Windows**.
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
