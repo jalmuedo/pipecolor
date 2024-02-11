@@ -5,6 +5,7 @@
 package main
 
 import (
+	"bytes"
 	"os"
 	"testing"
 
@@ -118,4 +119,22 @@ func TestIsInputFromPipe(t *testing.T) {
 			t.Errorf("Expect false, but get %t", result)
 		}
 	})
+}
+
+func TestDigestIo(t *testing.T) {
+	inputData := "Hello, world\nThis is a test!\n"
+	reader := bytes.NewReader([]byte(inputData))
+
+	var outputBuffer bytes.Buffer
+
+	err := digestIo(reader, &outputBuffer)
+	if err != nil {
+		t.Errorf("Error in digestIo: %v", err)
+	}
+
+	expectedOutput := "Hello, world\nThis is a test!\n"
+	actualOutput := outputBuffer.String()
+	if actualOutput != expectedOutput {
+		t.Errorf("Wrong output. Expected:\n%s\nResult:\n%s", expectedOutput, actualOutput)
+	}
 }

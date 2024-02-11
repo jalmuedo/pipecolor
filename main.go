@@ -5,11 +5,15 @@
 package main
 
 import (
+	"log"
 	"os"
 )
 
 func main() {
 	if isInputFromPipe() {
-		digestIo(os.Stdin, os.Stdout)
+		err := digestIo(os.Stdin, os.Stdout)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }

@@ -11,7 +11,8 @@ import (
 )
 
 func replaceTxt(text string, chunk string, colorChunk color.Color) string {
-	re := regexp.MustCompile(`(?i)` + chunk)
+	escapedChunk := regexp.QuoteMeta(chunk) // escape special characters
+	re := regexp.MustCompile(`(?i)` + "(" + escapedChunk + ")")
 	return re.ReplaceAllString(text, colorChunk.Render(chunk))
 }
 

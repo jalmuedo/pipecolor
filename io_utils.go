@@ -8,7 +8,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 )
 
@@ -24,18 +23,16 @@ func digestIo(r io.Reader, w io.Writer) error {
 	// the system page size (e.g., 4096 bytes on i386). Since Linux 2.6.11, the
 	// pipe capacity is 65536 bytes. Since Linux 2.6.35, the default pipe
 	// capacity is 65536 bytes.
-	//
-	// You can change the buffer size to increase performance.
-	// scanner := bufio.NewScanner(bufio.NewReaderSize(r, 64*1024))
 
-	scanner := bufio.NewScanner(bufio.NewReader(r))
+	scanner := bufio.NewScanner(bufio.NewReaderSize(r, 64*1024)) // big buffer size improves performance
 
 	for scanner.Scan() {
 		text := colorize(scanner.Text(), os.Args[1:])
 		_, err := fmt.Fprintln(w, text)
-		if scanner.Err(); err != nil {
-			log.Fatal(err)
+		if err != nil {
+			return err
 		}
 	}
+
 	return nil
 }
