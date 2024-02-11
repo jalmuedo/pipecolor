@@ -21,7 +21,9 @@ Clone the repository and build it with Go.
 
 ### Create an alias (optional)
 
-You can use the binary directly, but it is much more convenient to use aliases for the shell. On **Linux** you can create an alias to your binary by modifying the `~/.bashrc` file.
+You can use the binary directly, but it is much more convenient to use aliases for the shell.
+
+On **Linux** you can create an alias to your binary by modifying the `~/.bashrc` file.
 
 ```
 color () {
