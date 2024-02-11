@@ -25,7 +25,7 @@ You can use the binary directly, but it is much more convenient to use aliases f
 
 ```
 color () {
-  ~/.pipecolor "$@
+  ~/.pipecolor "$@"
 }
 ```
 
@@ -46,3 +46,4 @@ The binary receives the text through Stdin and as an argument a list of words se
 
 This project is [MIT licenced](license.txt)
 
+[![Go](https://github.com/jalmuedo/pipecolor/actions/workflows/go.yml/badge.svg)](https://github.com/jalmuedo/pipecolor/actions/workflows/go.yml)
