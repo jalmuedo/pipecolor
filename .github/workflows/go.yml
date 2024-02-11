@@ -34,9 +34,10 @@ jobs:
     - name: Create artifacts
       if: startsWith(github.ref, 'refs/tags/')
       run: |
-        mkdir -p artifacts
-        mv pipecolor artifacts/
-        mv pipecolor.exe artifacts/
+        mkdir -p artifacts/linux
+        mv pipecolor artifacts/linux/
+        mkdir -p artifacts/windows
+        mv pipecolor.exe artifacts/windows/
 
     - name: Upload artifact
       if: startsWith(github.ref, 'refs/tags/')
@@ -44,3 +45,12 @@ jobs:
       with:
         name: pipecolor
         path: artifacts/
+
+    - name: Release with Notes
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          artifacts/linux/pipecolor
+          artifacts/windows/pipecolor.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
